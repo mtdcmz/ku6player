@@ -307,7 +307,6 @@
             }
         }
 
-        /* Replaced fullscreen styles */
         .video-container.fullscreen {
             width: 100vw !important;
             height: 100vh !important;
@@ -323,7 +322,6 @@
             object-fit: contain;
         }
 
-        /* Add styles for maintaining video position in fullscreen */
         .video-container.fullscreen .controls {
             position: fixed;
             bottom: 0;
@@ -371,6 +369,9 @@
                     <span class="time-display">00:00 / 00:00</span>
                 </div>
                 <div class="right-controls">
+                    <div class="control-group">
+                        <button class="share-button">分享</button>
+                    </div>
                     <div class="control-group">
                         <div class="volume-control">
                             <button class="volume-button">
@@ -498,77 +499,6 @@
                 }
             });
 
-            // Get video URL from query parameter
-            var fullUrl = window.location.href;
-            var urlParts = fullUrl.split('?url=');
-            var videoUrl = urlParts.length > 1 ? decodeURIComponent(urlParts[1]) : null;
-
-            if (videoUrl) {
-                var fileExtension = videoUrl.split('.').pop().split('?')[0].toLowerCase();
-
-                if (['mp4', 'mov', 'avi', 'rm'].includes(fileExtension)) {
-                    video.src = videoUrl;
-                    video.addEventListener('loadedmetadata', function() {
-                        video.play();
-                    });
-                } else if (fileExtension === 'flv') {
-                    if (flvjs.isSupported()) {
-                        var flvPlayer = flvjs.createPlayer({
-                            type: 'flv',
-                            url: videoUrl
-                        });
-                        flvPlayer.attachMediaElement(video);
-                        flvPlayer.load();
-                        
-                        flvPlayer.on(flvjs.Events.ERROR, function(errorType, errorDetail) {
-                            console.error('FLV player error:', errorType, errorDetail);
-                            loadingOverlay.style.display = 'none';
-                            alert('Error playing the video. Please try again later.');
-                        });
-
-                        video.addEventListener('loadedmetadata', function() {
-                            video.play().catch(function(error) {
-                                console.error('Error attempting to play:', error);
-                                loadingOverlay.style.display = 'none';
-                                alert('Error playing the video. Please try again later.');
-                            });
-                        });
-
-                        // Destroy flvPlayer when video ends or on error
-                        video.addEventListener('ended', function() {
-                            if (flvPlayer) {
-                                flvPlayer.unload();
-                                flvPlayer.detachMediaElement();
-                                flvPlayer.destroy();
-                            }
-                        });
-
-                        video.addEventListener('error', function() {
-                            if (flvPlayer) {
-                                flvPlayer.unload();
-                                flvPlayer.detachMediaElement();
-                                flvPlayer.destroy();
-                            }
-                        });
-                    } else {
-                        console.error('FLV format is not supported in this browser');
-                        alert('FLV format is not supported in this browser. Please try a different video format.');
-                    }
-                } else if (Hls.isSupported()) {
-                    var hls = new Hls();
-                    hls.loadSource(videoUrl);
-                    hls.attachMedia(video);
-                    hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                        video.play();
-                    });
-                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                    video.src = videoUrl;
-                    video.addEventListener('loadedmetadata', function() {
-                        video.play();
-                    });
-                }
-            }
-
             // Add error handling
             video.addEventListener('error', function(e) {
                 console.error('Video error:', video.error);
@@ -677,6 +607,11 @@
                 video.volume = newVolume;
                 volumeProgress.style.height = (newVolume * 100) + '%';
             }
+
+            // Share button functionality
+            shareButton.addEventListener('click', function() {
+                alert('本地视频文件无法分享链接');
+            });
 
             // Fullscreen
             function toggleFullscreen() {

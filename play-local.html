@@ -74,7 +74,7 @@
             background: rgba(51, 51, 51, 0.8);
             display: flex;
             align-items: center;
-            transition: opacity 0.3s ease-in-out; /* Updated transition property */
+            transition: opacity 0.3s ease-in-out;
         }
 
         .controls.hidden {
@@ -111,8 +111,8 @@
             background: #7FFF00;
             border-radius: 50%;
             top: 50%;
-            transform: translate(-50%, -50%); /* Updated transform property */
-            left: 0; /* Updated position property */
+            transform: translate(-50%, -50%);
+            left: 0;
             display: none;
         }
 
@@ -245,7 +245,7 @@
             padding: 5px 10px;
             font-size: 12px;
             display: none;
-            border-radius: 0; /* Updated border-radius */
+            border-radius: 0;
         }
 
         .quality-menu {
@@ -372,9 +372,6 @@
                 </div>
                 <div class="right-controls">
                     <div class="control-group">
-                        <button class="share-button">分享</button>
-                    </div>
-                    <div class="control-group">
                         <div class="volume-control">
                             <button class="volume-button">
                                 <img src="volume.png" alt="Volume" draggable="false">
@@ -448,7 +445,11 @@
                     if (['mp4', 'mov', 'avi', 'rm'].includes(fileExtension)) {
                         video.src = videoUrl;
                         video.addEventListener('loadedmetadata', function() {
-                            video.play();
+                            // Do not auto-play, just show the play button
+                            container.classList.add('paused');
+                            playButton.style.display = 'block';
+                            pauseButton.style.display = 'none';
+                            bigPlayButton.style.display = 'block';
                         });
                     } else if (fileExtension === 'flv') {
                         if (flvjs.isSupported()) {
@@ -466,11 +467,11 @@
                             });
 
                             video.addEventListener('loadedmetadata', function() {
-                                video.play().catch(function(error) {
-                                    console.error('Error attempting to play:', error);
-                                    loadingOverlay.style.display = 'none';
-                                    alert('Error playing the video. Please try again later.');
-                                });
+                                // Do not auto-play, just show the play button
+                                container.classList.add('paused');
+                                playButton.style.display = 'block';
+                                pauseButton.style.display = 'none';
+                                bigPlayButton.style.display = 'block';
                             });
 
                             // Destroy flvPlayer when video ends or on error
@@ -643,9 +644,9 @@
                 var percent = (e.clientX - rect.left) / rect.width;
                 percent = Math.max(0, Math.min(1, percent));
                 video.currentTime = percent * video.duration;
-                var pixelPosition = (percent * rect.width); /* Updated calculation for pixelPosition */
+                var pixelPosition = (percent * rect.width);
                 progress.style.width = (percent * 100) + '%';
-                progressDot.style.left = pixelPosition + 'px'; /* Updated to use pixelPosition */
+                progressDot.style.left = pixelPosition + 'px';
             }
 
             // Volume control
@@ -676,21 +677,6 @@
                 video.volume = newVolume;
                 volumeProgress.style.height = (newVolume * 100) + '%';
             }
-
-            // Share button
-            shareButton.addEventListener('click', function() {
-                var currentUrl = window.location.href;
-                if(videoUrl){
-                    navigator.clipboard.writeText(currentUrl).then(function() {
-                        shareTooltip.style.display = 'block';
-                        setTimeout(function() {
-                            shareTooltip.style.display = 'none';
-                        }, 2000);
-                    });
-                } else {
-                    alert('本地视频文件无法分享链接');
-                }
-            });
 
             // Fullscreen
             function toggleFullscreen() {
@@ -753,15 +739,15 @@
                 var availableQualities = [];
 
                 if (videoHeight >= 1080) {
-                    availableQualities.push('1080p');
+                    availableQualities.push('蓝光');
                 }
                 if (videoHeight >= 720) {
-                    availableQualities.push('720p');
+                    availableQualities.push('高清');
                 }
                 if (videoHeight >= 480) {
-                    availableQualities.push('480p');
+                    availableQualities.push('清晰');
                 }
-                availableQualities.push('360p');
+                availableQualities.push('普通');
 
                 // 清空现有的选项
                 qualityMenu.innerHTML = '';

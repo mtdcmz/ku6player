@@ -4,7 +4,6 @@
 
 一款HTML5开源的仿酷6网视频播放器，界面简洁，支持MP4和FLV视频。
 
-**项目地址**: [GitHub](https://github.com/mtdcmz/ku6player)
 **在线演示**: [Live Demo](https://mtdcmz.github.io/ku6player/play.html?url=)
 
 ## 调用方法
@@ -24,5 +23,3 @@ https://mtdcmz.github.io/ku6player/play.html?url=视频地址
 ```
 
 **注意**: 替换`视频地址`为实际视频链接。
-
-更多详情请访问[GitHub页面](https://github.com/mtdcmz/ku6player)。

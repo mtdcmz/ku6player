@@ -44,7 +44,7 @@
             background: rgba(51, 51, 51, 0.8);
             display: flex;
             align-items: center;
-            transition: opacity 0.3s ease-in-out; /* Updated transition property */
+            transition: opacity 0.3s ease-in-out;
         }
 
         .controls.hidden {
@@ -81,8 +81,8 @@
             background: #7FFF00;
             border-radius: 50%;
             top: 50%;
-            transform: translate(-50%, -50%); /* Updated transform property */
-            left: 0; /* Updated position property */
+            transform: translate(-50%, -50%);
+            left: 0;
             display: none;
         }
 
@@ -215,7 +215,7 @@
             padding: 5px 10px;
             font-size: 12px;
             display: none;
-            border-radius: 0; /* Updated border-radius */
+            border-radius: 0;
         }
 
         .quality-menu {
@@ -277,7 +277,6 @@
             }
         }
 
-        /* Replaced fullscreen styles */
         .video-container.fullscreen {
             width: 100vw !important;
             height: 100vh !important;
@@ -293,7 +292,6 @@
             object-fit: contain;
         }
 
-        /* Add styles for maintaining video position in fullscreen */
         .video-container.fullscreen .controls {
             position: fixed;
             bottom: 0;
@@ -542,9 +540,9 @@
                 var percent = (e.clientX - rect.left) / rect.width;
                 percent = Math.max(0, Math.min(1, percent));
                 video.currentTime = percent * video.duration;
-                var pixelPosition = (percent * rect.width); /* Updated calculation for pixelPosition */
+                var pixelPosition = (percent * rect.width);
                 progress.style.width = (percent * 100) + '%';
-                progressDot.style.left = pixelPosition + 'px'; /* Updated to use pixelPosition */
+                progressDot.style.left = pixelPosition + 'px';
             }
 
             // Volume control
@@ -613,14 +611,12 @@
                         document.msExitFullscreen();
                     }
                     container.classList.remove('fullscreen');
-                    video.style.width = '';
-                    video.style.height = '';
                     fullscreenButton.querySelector('img').src = 'fullscreen.png';
                     fullscreenButton.querySelector('img').alt = 'Fullscreen';
                 }
             }
 
-            // 监听全屏变化事件
+            // Listen for fullscreen change events
             document.addEventListener('fullscreenchange', handleFullscreenChange);
             document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
             document.addEventListener('mozfullscreenchange', handleFullscreenChange);
@@ -642,7 +638,6 @@
                 qualityMenu.style.display = qualityMenu.style.display === 'none' ? 'flex' : 'none';
             });
 
-
             function updateQualityOptions() {
                 var videoHeight = video.videoHeight;
                 var availableQualities = [];
@@ -658,10 +653,10 @@
                 }
                 availableQualities.push('普通');
 
-                // 清空现有的选项
+                // Clear existing options
                 qualityMenu.innerHTML = '';
 
-                // 添加新的选项
+                // Add new options
                 availableQualities.forEach(function(quality) {
                     var option = document.createElement('div');
                     option.className = 'quality-option';
@@ -670,7 +665,7 @@
                     qualityMenu.appendChild(option);
                 });
 
-                // 重新绑定事件监听器
+                // Rebind event listeners
                 var newQualityOptions = document.querySelectorAll('.quality-option');
                 newQualityOptions.forEach(function(option) {
                     option.addEventListener('click', function() {
@@ -701,6 +696,7 @@
                 container.classList.add('paused');
                 playButton.style.display = 'block';
                 pauseButton.style.display = 'none';
+                bigPlayButton.style.display = 'block';
             });
 
             // Update loading percentage
@@ -811,4 +807,3 @@
     </script>
 </body>
 </html>
-

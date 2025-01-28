@@ -2,7 +2,7 @@
 
 ## 项目简介
 
-一款HTML5开源的仿酷6网视频播放器，界面简洁，支持MP4和FLV视频。
+一款HTML5开源的仿酷6网视频播放器，界面简洁，支持MP4和M3U8格式视频播放（使用[HLS.js](https://github.com/video-dev/hls.js/)）。
 
 **在线演示**: [Live Demo](https://mtdcmz.github.io/ku6player/play.html?url=)
 

@@ -365,7 +365,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flv.js@latest"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var container = document.querySelector('.video-container');
@@ -402,55 +401,12 @@
             if (videoUrl) {
                 var fileExtension = videoUrl.split('.').pop().split('?')[0].toLowerCase();
 
-                if (['mp4', 'mov', 'avi', 'rm'].includes(fileExtension)) {
-                    video.src = videoUrl;
-                    video.addEventListener('loadedmetadata', function() {
-                        video.play();
-                    });
-                } else if (fileExtension === 'flv') {
-                    if (flvjs.isSupported()) {
-                        var flvPlayer = flvjs.createPlayer({
-                            type: 'flv',
-                            url: videoUrl
-                        });
-                        flvPlayer.attachMediaElement(video);
-                        flvPlayer.load();
-                        
-                        flvPlayer.on(flvjs.Events.ERROR, function(errorType, errorDetail) {
-                            console.error('FLV player error:', errorType, errorDetail);
-                            loadingOverlay.style.display = 'none';
-                            alert('Error playing the video. Please try again later.');
-                        });
-
-                        video.addEventListener('loadedmetadata', function() {
-                            video.play().catch(function(error) {
-                                console.error('Error attempting to play:', error);
-                                loadingOverlay.style.display = 'none';
-                                alert('Error playing the video. Please try again later.');
-                            });
-                        });
-
-                        // Destroy flvPlayer when video ends or on error
-                        video.addEventListener('ended', function() {
-                            if (flvPlayer) {
-                                flvPlayer.unload();
-                                flvPlayer.detachMediaElement();
-                                flvPlayer.destroy();
-                            }
-                        });
-
-                        video.addEventListener('error', function() {
-                            if (flvPlayer) {
-                                flvPlayer.unload();
-                                flvPlayer.detachMediaElement();
-                                flvPlayer.destroy();
-                            }
-                        });
-                    } else {
-                        console.error('FLV format is not supported in this browser');
-                        alert('FLV format is not supported in this browser. Please try a different video format.');
-                    }
-                } else if (Hls.isSupported()) {
+if (['mp4'].includes(fileExtension)) {  // 仅支持 MP4
+    video.src = videoUrl;
+    video.addEventListener('loadedmetadata', function() {
+        video.play();
+    });
+} else if (Hls.isSupported()) {  // 使用 HLS 加载其他支持的格式
                     var hls = new Hls();
                     hls.loadSource(videoUrl);
                     hls.attachMedia(video);

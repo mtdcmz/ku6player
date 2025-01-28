@@ -341,7 +341,7 @@
             <button class="file-select-button" onclick="document.getElementById('video-file').click()">
                 选择视频文件
             </button>
-            <div class="file-select-text">支持的格式: MP4, MOV, AVI, FLV</div>
+            <div class="file-select-text">支持的格式: MP4</div>
         </div>
         <video class="video-player"></video>
         <button class="big-play-button">
@@ -402,7 +402,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flv.js@latest"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var container = document.querySelector('.video-container');
@@ -442,60 +441,19 @@
 
                     // Hide file selection UI
                     fileSelectContainer.style.display = 'none';
-
-                    if (['mp4', 'mov', 'avi', 'rm'].includes(fileExtension)) {
-                        video.src = videoUrl;
-                        video.addEventListener('loadedmetadata', function() {
-                            // Do not auto-play, just show the play button
-                            container.classList.add('paused');
-                            playButton.style.display = 'block';
-                            pauseButton.style.display = 'none';
-                            bigPlayButton.style.display = 'block';
-                        });
-                    } else if (fileExtension === 'flv') {
-                        if (flvjs.isSupported()) {
-                            var flvPlayer = flvjs.createPlayer({
-                                type: 'flv',
-                                url: videoUrl
-                            });
-                            flvPlayer.attachMediaElement(video);
-                            flvPlayer.load();
-                            
-                            flvPlayer.on(flvjs.Events.ERROR, function(errorType, errorDetail) {
-                                console.error('FLV player error:', errorType, errorDetail);
-                                loadingOverlay.style.display = 'none';
-                                alert('Error playing the video. Please try again later.');
-                            });
-
-                            video.addEventListener('loadedmetadata', function() {
-                                // Do not auto-play, just show the play button
-                                container.classList.add('paused');
-                                playButton.style.display = 'block';
-                                pauseButton.style.display = 'none';
-                                bigPlayButton.style.display = 'block';
-                            });
-
-                            // Destroy flvPlayer when video ends or on error
-                            video.addEventListener('ended', function() {
-                                if (flvPlayer) {
-                                    flvPlayer.unload();
-                                    flvPlayer.detachMediaElement();
-                                    flvPlayer.destroy();
-                                }
-                            });
-
-                            video.addEventListener('error', function() {
-                                if (flvPlayer) {
-                                    flvPlayer.unload();
-                                    flvPlayer.detachMediaElement();
-                                    flvPlayer.destroy();
-                                }
-                            });
-                        } else {
-                            console.error('FLV format is not supported in this browser');
-                            alert('FLV format is not supported in this browser. Please try a different video format.');
-                        }
-                    }
+if (['mp4'].includes(fileExtension)) {
+    video.src = videoUrl;
+    video.addEventListener('loadedmetadata', function() {
+        // Do not auto-play, just show the play button
+        container.classList.add('paused');
+        playButton.style.display = 'block';
+        pauseButton.style.display = 'none';
+        bigPlayButton.style.display = 'block';
+    });
+} else {
+    alert('Unsupported video format. Please upload an MP4 video.');
+    console.error('Unsupported video format:', fileExtension);
+}
                 }
             });
 
